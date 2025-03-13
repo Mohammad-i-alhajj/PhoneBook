@@ -5,7 +5,6 @@
         static void Main(string[] args)
         {
             Console.Title = "Phone Book";
-
             var phoneContactService = new Services.PhoneContactService();
             while (true)
             {
@@ -24,49 +23,24 @@
                     case "1":
                         do
                         {
-                            Console.Clear();
-                            Console.Write("Enter Contact Name:              ");
-                            string name = Console.ReadLine();
-                            Console.Write("Enter Contact Phone Number:      ");
-                            string phoneNumber = Console.ReadLine();
-                            phoneContactService.AddContact(name, phoneNumber);
+                            phoneContactService.Add();
                             Console.WriteLine("Press -1 to exit or any key to continue");
                         } while (Console.ReadLine() != "-1");
                         break;
                     case "2":
-                        Console.Clear();
-                        Console.Write("Enter a contact name to search. if you have more than one contact that's have the same name, I will found the first one:      ");
-                        var searchByName = Console.ReadLine();
-                        phoneContactService.SearchContactByUserName(searchByName);
-                        Console.WriteLine("");
+                        phoneContactService.SearchContactByName();
                         break;
                     case "3":
-                        Console.Clear();
-                        Console.Write("Enter contact phone number to search:      ");
-                        var searchByPhoneNumber = Console.ReadLine();
-                        phoneContactService.SearchContactByUserPhoneNumber(searchByPhoneNumber);
-                        Console.WriteLine("");
+                        phoneContactService.SearchContactByPhoneNumber();
                         break;
                     case "4":
-                        Console.Clear();
-                        Console.Write("Delet a contact by name:     ");
-                        var deleteByName = Console.ReadLine();
-                        phoneContactService.DeleteContact(deleteByName);
-                        Console.WriteLine("");
+                        phoneContactService.Delete();
                         break;
                     case "5":
-                        Console.Clear();
-                        Console.Write("Enter a contact name to edite phone number:      ");
-                        var editName = Console.ReadLine();
-                        Console.Write("Enter new phone number:      ");
-                        var newPhoneNumber = Console.ReadLine();
-                        phoneContactService.editePhoneNumber(editName, newPhoneNumber);
-                        Console.WriteLine("");
+                        phoneContactService.EditePhoneNumber();
                         break;
                     case "6":
-                        Console.Clear();
-                        phoneContactService.PrintAllContacts();
-                        Console.WriteLine("");
+                        phoneContactService.PrintAll();
                         break;
                     case "-1":
                         Console.Clear();

@@ -5,10 +5,10 @@ namespace PhoneBook.Services
     public class PhoneContactService
     {
 
+        #region Variables
         private List<PhoneContact> _contacts;
-        /// <summary>
-        /// Constructor to initialize the list of contacts
-        /// </summary>
+        #endregion
+
         #region Constructor
         public PhoneContactService()
         {
@@ -19,35 +19,167 @@ namespace PhoneBook.Services
         }
         #endregion
 
+        #region Methods
+
         /// <summary>
         /// Method to add a new contact 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="phoneNumber"></param>
+        /// <param name="name">Name - String value</param>
+        /// <param name="phoneNumber">Number - String value</param>
         /// <returns></returns>
-        #region Method to add a new contact
-        public string AddContact(string name, string phoneNumber)
+        public void Add()
         {
+            Console.Clear();
+            Console.Write("Enter Contact Name:              ");
+            string name = Console.ReadLine();
+            Console.Write("Enter Contact Phone Number:      ");
+            string phoneNumber = Console.ReadLine();
             try
             {
-                _contacts.Add(new PhoneContact { Name = name, PhoneNumber = phoneNumber });
-                return "Contact added successfully";
+                var isExist = _contacts.Any(c => c.PhoneNumber == phoneNumber);
+                if ( isExist)
+                {
+                    Console.WriteLine("Phone number already exist. ");
+                }
+                else
+                {
+                    _contacts.Add(new PhoneContact { Name = name, PhoneNumber = phoneNumber });
+                    Console.WriteLine("Added successfuly. ");
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Unkown Error.");
+            }
+        }
+
+        /// <summary>
+        /// Method to edit a contact's phone number
+        /// </summary>
+        /// <param name="name">Name - String value</param>
+        /// <param name="phoneNumber">Phone number - String value</param>
+        /// <returns></returns>
+        public void EditePhoneNumber()
+        {
+            Console.Clear();
+            Console.Write("Enter a contact name to edite phone number:      ");
+            var name = Console.ReadLine();
+            Console.Write("Enter new phone number:      ");
+            var phoneNumber = Console.ReadLine();
+            // check if the number is alrady exist or not and do it using LINQ
+            try
+            {
+                foreach (var contact in _contacts)
+                {
+                    if (contact.Name == name)
+                    {
+                        Console.WriteLine("Edit done successfuly");
+                        contact.PhoneNumber = phoneNumber;
+                        Console.WriteLine("");
+                    }
+                }
             }
             catch (Exception)
             {
                 Console.WriteLine("Unkown error try again");
-                return "";
             }
-
         }
-        #endregion
+
+        /// <summary>
+        /// Method to delete a contact
+        /// </summary>
+        /// <param name="name">Name - String value</param>
+        /// <returns></returns>
+        public void Delete()
+        {
+            Console.Clear();
+            Console.Write("Delet a contact by name:     ");
+            var deleteByName = Console.ReadLine();
+            // do it using LINQ 
+            // check it again unkown error happend
+            try
+            {
+                foreach (var contact in _contacts)
+                {
+                    if (contact.Name == deleteByName)
+                    {
+                        Console.WriteLine("Deleted successfuly");
+                        _contacts.Remove(contact);
+                        Console.WriteLine("");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Unkown error try again");
+                //throw;
+            }
+        }
+
+        /// <summary>
+        /// Method to search for a contact by name
+        /// </summary>
+        /// <param name="name">Name - String value</param>
+        /// <returns></returns>
+        public void SearchContactByName()
+        {
+            Console.Clear();
+            Console.Write("Enter a contact name to search:      ");
+            var name = Console.ReadLine();
+            // trying to do it using LINQ
+            try
+            {
+                foreach (var contact in _contacts)
+                {
+                    if (contact.Name == name)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
+                        Console.WriteLine("");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Uknown error try again");
+            }
+        }
+
+        /// <summary>
+        /// Method to search for a contact by phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone Number - String value</param>
+        /// <returns></returns>
+        public void SearchContactByPhoneNumber()
+        {
+            Console.Clear();
+            Console.Write("Enter contact phone number to search:      ");
+            var phoneNumber = Console.ReadLine();
+            // do it using LINQ
+            try
+            {
+                foreach (var contact in _contacts)
+                {
+                    if (contact.PhoneNumber == phoneNumber)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
+                        Console.WriteLine("");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Unkown error try again");
+            }
+        }
 
         /// <summary>
         /// Method to print all contacts
         /// </summary>
-        #region Method to print all contacts
-        public void PrintAllContacts()
+        public void PrintAll()
         {
+            Console.Clear();
             try
             {
                 foreach (var contact in _contacts)
@@ -60,121 +192,9 @@ namespace PhoneBook.Services
             {
                 Console.WriteLine("Unkown error try again");
             }
+            Console.WriteLine("");
         }
-        #endregion
 
-        /// <summary>
-        /// Method to search for a contact by name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        #region Method to search for a contact by name
-        public string SearchContactByUserName(string name)
-        {
-            try
-            {
-                foreach (var contact in _contacts)
-                {
-                    if (contact.Name == name)
-                    {
-                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
-                        return $"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}";
-                    }
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Uknown error try again");
-                return "";
-            }
-        }
         #endregion
-
-        /// <summary>
-        /// Method to search for a contact by phone number
-        /// </summary>
-        /// <param name="phoneNumber"></param>
-        /// <returns></returns>
-        #region Method to search for a contact by phone number
-        public string SearchContactByUserPhoneNumber(string phoneNumber)
-        {
-            try
-            {
-                foreach (var contact in _contacts)
-                {
-                    if (contact.PhoneNumber == phoneNumber)
-                    {
-                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
-                        return $"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}";
-                    }
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Unkown error try again");
-                return "";
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Method to delete a contact
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        #region Method to delete a contact
-        public string DeleteContact(string name)
-        {
-            try
-            {
-                foreach (var contact in _contacts)
-                {
-                    if (contact.Name == name)
-                    {
-                        _contacts.Remove(contact);
-                        return "Contact deleted successfully";
-                    }
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Unkown error try again");
-                return "";
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Method to edit a contact's phone number
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="phoneNumber"></param>
-        /// <returns></returns>
-        #region Method to edit a contact's phone number
-        public string editePhoneNumber(string name, string phoneNumber)
-        {
-            try
-            {
-                foreach (var contact in _contacts)
-                {
-                    if (contact.Name == name)
-                    {
-                        contact.PhoneNumber = phoneNumber;
-                        return "Phone number updated successfully";
-                    }
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Unkown error try again");
-                return "";
-            }
-        }
-        #endregion
-
     }
 }
