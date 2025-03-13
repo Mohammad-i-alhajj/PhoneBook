@@ -17,6 +17,7 @@
                 Console.WriteLine("To quit, Enter                     ==> -1");
                 Console.WriteLine("");
                 Console.Write("Enter the Op Number:     ");
+
                 var opNumber = Console.ReadLine();
                 switch (opNumber)
                 {
@@ -48,8 +49,7 @@
                         Console.WriteLine("");
                         return;
                     default:
-                        Console.WriteLine("");
-                        Console.WriteLine("");
+                        Console.Clear();
                         Console.WriteLine("Unkown Op:       ");
                         Console.WriteLine("");
                         break;

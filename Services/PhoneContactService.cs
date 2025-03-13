@@ -25,7 +25,7 @@ namespace PhoneBook.Services
         /// Method to add a new contact 
         /// </summary>
         /// <param name="name">Name - String value</param>
-        /// <param name="phoneNumber">Number - String value</param>
+        /// <param name="phoneNumber">Phone number - String value</param>
         /// <returns></returns>
         public void Add()
         {
@@ -37,9 +37,9 @@ namespace PhoneBook.Services
             try
             {
                 var isExist = _contacts.Any(c => c.PhoneNumber == phoneNumber);
-                if ( isExist)
+                if (isExist || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(phoneNumber) || string.IsNullOrWhiteSpace(phoneNumber))
                 {
-                    Console.WriteLine("Phone number already exist. ");
+                    Console.WriteLine("Phone number already exist, Or name is null or empty, Or phone number is null or empty ");
                 }
                 else
                 {
@@ -62,21 +62,28 @@ namespace PhoneBook.Services
         public void EditePhoneNumber()
         {
             Console.Clear();
-            Console.Write("Enter a contact name to edite phone number:      ");
-            var name = Console.ReadLine();
-            Console.Write("Enter new phone number:      ");
-            var phoneNumber = Console.ReadLine();
-            // check if the number is alrady exist or not and do it using LINQ
             try
             {
-                foreach (var contact in _contacts)
+                Console.Write("Enter a contact name to edite phone number:      ");
+                var name = Console.ReadLine();
+                if (_contacts.Any(c => c.Name == name))
                 {
-                    if (contact.Name == name)
+                    Console.Write("Enter new phone number:      ");
+                    var phoneNumber = Console.ReadLine();
+                    if (_contacts.Any(c => c.PhoneNumber == phoneNumber))
+                    {
+                        Console.WriteLine("Phone number already exist");
+                    }
+                    else
                     {
                         Console.WriteLine("Edit done successfuly");
-                        contact.PhoneNumber = phoneNumber;
-                        Console.WriteLine("");
+                        _contacts.Add(new PhoneContact { Name = name, PhoneNumber = phoneNumber });
                     }
+                    Console.WriteLine("");
+                }
+                else
+                {
+                    Console.WriteLine("Name not exist");
                 }
             }
             catch (Exception)
@@ -95,24 +102,20 @@ namespace PhoneBook.Services
             Console.Clear();
             Console.Write("Delet a contact by name:     ");
             var deleteByName = Console.ReadLine();
-            // do it using LINQ 
-            // check it again unkown error happend
+            var deleteContact = _contacts.Where(c => c.Name == deleteByName).ToList();
             try
             {
-                foreach (var contact in _contacts)
+                foreach (var contact in deleteContact)
                 {
-                    if (contact.Name == deleteByName)
-                    {
-                        Console.WriteLine("Deleted successfuly");
-                        _contacts.Remove(contact);
-                        Console.WriteLine("");
-                    }
+                    Console.WriteLine("Deleted successfuly");
+                    _contacts.Remove(contact);
+                    Console.WriteLine("");
+
                 }
             }
             catch (Exception)
             {
                 Console.WriteLine("Unkown error try again");
-                //throw;
             }
         }
 
@@ -126,17 +129,14 @@ namespace PhoneBook.Services
             Console.Clear();
             Console.Write("Enter a contact name to search:      ");
             var name = Console.ReadLine();
-            // trying to do it using LINQ
+            var SearchByName = _contacts.Where(c => c.Name == name).ToList();
             try
             {
-                foreach (var contact in _contacts)
+                foreach (var contact in SearchByName)
                 {
-                    if (contact.Name == name)
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
-                        Console.WriteLine("");
-                    }
+                    Console.WriteLine("");
+                    Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
+                    Console.WriteLine("");
                 }
             }
             catch (Exception)
@@ -155,17 +155,14 @@ namespace PhoneBook.Services
             Console.Clear();
             Console.Write("Enter contact phone number to search:      ");
             var phoneNumber = Console.ReadLine();
-            // do it using LINQ
+            var searchByPhoneNumber = _contacts.Where(c => c.PhoneNumber == phoneNumber).ToList();
             try
             {
-                foreach (var contact in _contacts)
+                foreach (var contact in searchByPhoneNumber)
                 {
-                    if (contact.PhoneNumber == phoneNumber)
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
-                        Console.WriteLine("");
-                    }
+                    Console.WriteLine("");
+                    Console.WriteLine($"Name: {contact.Name}, Phone Number: {contact.PhoneNumber}");
+                    Console.WriteLine("");
                 }
             }
             catch (Exception)
