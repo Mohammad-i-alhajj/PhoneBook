@@ -8,7 +8,7 @@ namespace PhoneBook.Domains
 {
     public class PhoneContact
     {
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
+        public required string Name { get; set; }
+        public required string PhoneNumber { get; set; }
     }
 }
