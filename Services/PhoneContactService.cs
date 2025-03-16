@@ -1,10 +1,10 @@
-﻿using PhoneBook.Domains;
+﻿using Domains.Inetrafces;
+using PhoneBook.Domains;
 
 namespace PhoneBook.Services
 {
-    public class PhoneContactService
+    public class PhoneContactService : IPhoneContact
     {
-
         #region Variables
         private List<PhoneContact> _contacts;
         #endregion
@@ -20,7 +20,6 @@ namespace PhoneBook.Services
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Method to add a new contact 
         /// </summary>
@@ -31,12 +30,12 @@ namespace PhoneBook.Services
         {
             Console.Clear();
             Console.Write("Enter Contact Name:              ");
-            string name = Console.ReadLine();
+            string name = Console.ReadLine().ToLower();
             Console.Write("Enter Contact Phone Number:      ");
             string phoneNumber = Console.ReadLine();
             try
             {
-                var isExist = _contacts.Any(c => c.PhoneNumber == phoneNumber);
+                var isExist = CheckIfUserExistByPhoneNumber(phoneNumber);
                 if (isExist || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(phoneNumber) || string.IsNullOrWhiteSpace(phoneNumber))
                 {
                     Console.WriteLine("Phone number already exist, Or name is null or empty, Or phone number is null or empty ");
@@ -65,18 +64,20 @@ namespace PhoneBook.Services
             try
             {
                 Console.Write("Enter a contact name to edite phone number:      ");
-                var name = Console.ReadLine();
+                var name = Console.ReadLine().ToLower();
                 if (_contacts.Any(c => c.Name == name))
                 {
                     Console.Write("Enter new phone number:      ");
                     var phoneNumber = Console.ReadLine();
-                    if (_contacts.Any(c => c.PhoneNumber == phoneNumber))
+                    var isExist = CheckIfUserExistByPhoneNumber(phoneNumber);
+                    if (isExist)
                     {
                         Console.WriteLine("Phone number already exist");
                     }
                     else
                     {
                         Console.WriteLine("Edit done successfuly");
+                        _contacts.RemoveAll(c => c.Name == name);
                         _contacts.Add(new PhoneContact { Name = name, PhoneNumber = phoneNumber });
                     }
                     Console.WriteLine("");
@@ -101,7 +102,7 @@ namespace PhoneBook.Services
         {
             Console.Clear();
             Console.Write("Delet a contact by name:     ");
-            var deleteByName = Console.ReadLine();
+            var deleteByName = Console.ReadLine().ToLower();
             var deleteContact = _contacts.Where(c => c.Name == deleteByName).ToList();
             try
             {
@@ -128,7 +129,7 @@ namespace PhoneBook.Services
         {
             Console.Clear();
             Console.Write("Enter a contact name to search:      ");
-            var name = Console.ReadLine();
+            var name = Console.ReadLine().ToLower();
             var SearchByName = _contacts.Where(c => c.Name == name).ToList();
             try
             {
@@ -148,7 +149,7 @@ namespace PhoneBook.Services
         /// <summary>
         /// Method to search for a contact by phone number
         /// </summary>
-        /// <param name="phoneNumber">Phone Number - String value</param>
+        /// <param name="phoneNumber">Phone number - String value</param>
         /// <returns></returns>
         public void SearchContactByPhoneNumber()
         {
@@ -192,6 +193,16 @@ namespace PhoneBook.Services
             Console.WriteLine("");
         }
 
+        /// <summary>
+        /// Method to check if a user exists by phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone number - String value</param>
+        /// <returns></returns>
+        public bool CheckIfUserExistByPhoneNumber(string phoneNumber)
+        {
+            var isExist = _contacts.Any(c => c.PhoneNumber == phoneNumber);
+            return isExist;
+        }
         #endregion
     }
 }
